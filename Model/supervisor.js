@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
+const crypto = require('crypto');
 
 
 // const validator = require('validator')
@@ -40,9 +41,11 @@ const supervisorSchema = new mongoose.Schema(
         min: 5,
         select: false
       },
-      ResetToken: {
-        type: string
-      },
+      // ResetToken: {
+      //   type: String
+      // },
+      PasswordResetToken: String,
+      PasswordResetExpires: Date,
       city: String,
       state: String,
       country: String,
@@ -65,19 +68,31 @@ const supervisorSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// supervisorSchema.pre('save', async function(next){
-// // only run this function if the password was modified
-// if(!this.password.isModified('password')) return next();
-// // match the passwor with the cost at 12
-// this.password = await bcrypt.hash(this.password, 12)
+supervisorSchema.pre('save', async function(next){
+// only run this function if the password was modified
+if(!this.password.isModified('password')) return next();
+// match the passwor with the cost at 12
+this.password = await bcrypt.hash(this.password, 12)
 
-// next()
+next()
 
-// })
+})
 
 supervisorSchema.methods.correctPassword = async function(candidatePassword, supervisorPassword) {
   return await bcrypt.compare(candidatePassword, supervisorPassword)
 }
+
+
+// supervisorSchema.methods.createPasswordResetToken = async function(){
+//   const ResetToken = crypto.randomBytes(32).toString('hex');
+
+//   this.PasswordResetToken = crypto.createHash('sha234').update(ResetToken).digest('hex');
+//   this.PasswordResetExpires = Date.now + 10 * 60 * 1000;
+  
+//   console.log({ResetToken}, this.PasswordResetToken)
+//   return ResetToken
+// }
+
 
 // supervisorSchema.pre(/^find/, function(next) {
 //   this.populate({
