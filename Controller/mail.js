@@ -2,7 +2,7 @@ var nodemailer = require('nodemailer');
 
 
 
-
+// mail trap
 /** send mail from testing account */
 exports.email1 = async (req, res, next)=>  {
 

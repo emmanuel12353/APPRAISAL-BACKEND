@@ -27,3 +27,26 @@ exports.Upload = async(req, res) => {
      };
      
 
+     exports.downloadExcel = async (req, res) => {
+      try {
+          const data = await Direct.find({}); // Assuming using Mongoose
+    
+          // Convert data to JSON
+          const jsonData = JSON.parse(JSON.stringify(data));
+    
+          // Convert JSON to Excel
+          const xls = json2xls(jsonData);
+    
+          
+          // Set response headers
+          res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+          res.setHeader('Content-Disposition', 'attachment; filename="data.xlsx"');
+    
+          // Send Excel file
+          res.end(xls, 'binary');
+      } catch (err) {
+          console.error(err);
+          res.status(500).json({ message: 'Internal server error' });
+      }
+    };
+

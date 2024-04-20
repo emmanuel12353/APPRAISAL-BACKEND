@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const connectDB = require('../Data/config');
 // const validator = require('validator')
 
-const staffSchema = new mongoose.Schema(
+const appraiseSchema = new mongoose.Schema(
   {
     staffId: {
          type: String,
@@ -28,7 +28,7 @@ const staffSchema = new mongoose.Schema(
         max: 50,
         unique: true,
         lowercase: true,
-   
+      
       },
       solId:{
         type: Number,
@@ -37,16 +37,15 @@ const staffSchema = new mongoose.Schema(
         trim: true
     
       },
-      jobRole: String,
+    
+      score: {
+        type: Number,
+        required: true,
+      },
       supervisorId: String,
-      supervisor_name: String,
-   
-
-
-
     
     },
   { timestamps: true }
 );
 
-module.exports = mongoose.model("Staff", staffSchema)
+module.exports = mongoose.model("Appraise", appraiseSchema)

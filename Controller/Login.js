@@ -19,10 +19,12 @@ exports.supervisorSignup = async(req, res, next)=>{
   // if(!req.body.email) return next(new AppError('please provide a valid email', 400))
   // if(!req.body.password) return next(new AppError('please provide a valid password', 400))
   // if(!req.body.solid) return next(new AppError('please provide your business office soi id', 400))
+                        const id = req.body.id
                         const firstname = req.body.firstname;
                         const lastname= req.body.lastname;
                        const  email = req.body.email;
                        const password = req.body.password;
+                       const JobRole = req.body.JobRole
                         const solid =  req.body.solid;
                        const  city = req.body.city;
                         const state= req.body.state;
@@ -32,21 +34,12 @@ exports.supervisorSignup = async(req, res, next)=>{
                         const staff= req.body.staff;
 
   const newSupervisor = await new Supervisor({
-                        // firstname: req.body.firstname,
-                        // lastname: req.body.lastname,
-                        // email: req.body.email,
-                        // solid: req.body.solid,
-                        // city: req.body.city,
-                        // state: req.body.state,
-                        // country: req.body.state,
-                        // phoneNumber: req.body.phoneNumber,
-                        // Appraisal: req.body.Appraisal,
-                        // staff: req.body.staff,
-                       
-                           firstname: firstname,
+                        id: id,
+                        firstname: firstname,
                         lastname: lastname,
                         email: email,
                         password: password,
+                        JobRole: JobRole,
                         solid: solid,
                         city: city,
                         state: state,
@@ -97,7 +90,7 @@ const correct = existingsupervisor.correctPassword(password, existingsupervisor.
   const token = signedToken(existingsupervisor.id)
   res.status(200).json({
     status: 'success',
-    
+    existingsupervisor,
     token
   })
   next()

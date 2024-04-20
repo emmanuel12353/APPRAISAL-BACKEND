@@ -7,6 +7,13 @@ const crypto = require('crypto');
 
 const supervisorSchema = new mongoose.Schema(
   {
+    id:{
+      type: String,
+      min: 2,
+      max: 30,
+      trim: true,
+      require: true
+    },
     firstname: {
         type: String,
         min: 2,
@@ -25,10 +32,7 @@ const supervisorSchema = new mongoose.Schema(
         max: 50,
         unique: true,
         lowercase: true,
-        // validate(value) {
-        // if(!validator.isEmail(value)) {
-        //   throw new error ('email is invalid')
-        // }
+     
         
       },
       solid:{
@@ -41,67 +45,30 @@ const supervisorSchema = new mongoose.Schema(
         min: 5,
         select: false
       },
-      // ResetToken: {
-      //   type: String
-      // },
+      JobRole: {
+        type: String,
+        require: true,
+        trim: true
+      },
+     
       PasswordResetToken: String,
       PasswordResetExpires: Date,
       city: String,
       state: String,
       country: String,
       phoneNumber: String,
-      role: {
-        type: String,
-        min: 5,
-      },
-//       Appraisal: {
-//         type: mongoose.Schema.ObjectId,
-//         ref: 'Appraisal',
-//         require: [true, 'fill in the supervisors details']
-//    },
-//    staff: {
-//     type: mongoose.Schema.ObjectId,
-//     ref: 'staff',
-//     require: [true, 'fill in the supervisors details']
-// },
+     
+
     },
   { timestamps: true }
 );
 
-supervisorSchema.pre('save', async function(next){
-// only run this function if the password was modified
-if(!this.password.isModified('password')) return next();
-// match the passwor with the cost at 12
-this.password = await bcrypt.hash(this.password, 12)
 
-next()
-
-})
 
 supervisorSchema.methods.correctPassword = async function(candidatePassword, supervisorPassword) {
   return await bcrypt.compare(candidatePassword, supervisorPassword)
 }
 
 
-// supervisorSchema.methods.createPasswordResetToken = async function(){
-//   const ResetToken = crypto.randomBytes(32).toString('hex');
 
-//   this.PasswordResetToken = crypto.createHash('sha234').update(ResetToken).digest('hex');
-//   this.PasswordResetExpires = Date.now + 10 * 60 * 1000;
-  
-//   console.log({ResetToken}, this.PasswordResetToken)
-//   return ResetToken
-// }
-
-
-// supervisorSchema.pre(/^find/, function(next) {
-//   this.populate({
-//     path:'staff',
-//     select: 'name'
-//   }).populate({
-//     path: 'appraisal',
-//     select: 'score1 score2 score3 score4'
-//   })
-//   next();
-// })
 module.exports = mongoose.model("Supervisor", supervisorSchema)
