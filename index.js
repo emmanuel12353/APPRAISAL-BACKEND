@@ -9,6 +9,7 @@ const staffRoute = require('./Routes/staff');
 const supervisorRoute = require('./Routes/supervisor')
 const bodyParser = require('body-parser');
 const StaffRoute = require('./Routes/staff');
+const cors= require('cors')
 const DseRoute = require('./Routes/dse');
 
 
@@ -20,7 +21,20 @@ dotenv.config();
 connectDB();
 const port = process.env.PORT
 
+const corsOptions=[
+  {
+    origin:"http://localhost:3000",
+  },
+  {
+    origin:"https://uba-outsourced.onrender.com",
+  },
+  {
+    origin:"http://localhost:8000",
+  },
+]
 
+
+app.use(cors(corsOptions))
 
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
