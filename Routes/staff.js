@@ -1,6 +1,7 @@
 const express = require('express');
 const Staff = require('../Model/staff');
 const Appraise = require('../Model/appraised');
+
 const StaffListController = require('../Controller/staffList')
 
 
@@ -34,5 +35,7 @@ const router = express.Router();
 router.get('/v1/staff', StaffListController.list).post('/v1/uploadStaff',upload.single("Csvpath"), StaffListController.Upload).get('/v1/downloadstaff', StaffListController.downloadExcel)
 
 router.post('/v1/staff/apppraisal', StaffListController.appraisalScore).get('/v1/staff/apppraisal', StaffListController.AppraisedStaff)
+router.post('/v1/AppraisalUpload',upload.single("Csvpath"), StaffListController.telappUpload)
+
 
 module.exports = router

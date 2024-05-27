@@ -11,6 +11,7 @@ const json2xls = require('json2xls');
 
 const staff = require("../Model/staff");
 const Appraise = require("../Model/appraised")
+const telappraise = require("../Model/telappraisal")
 const multer = require('multer');
 // .................................................................................................
 
@@ -132,4 +133,23 @@ res.status(200).json({
   status: 'success',
   AppraisalList
 })
+}
+
+
+// ---------------------------------------------------------------------------------------------------------
+
+exports.telappUpload= async(req, res) => {
+  const csvFilePath = req.file.path;
+  const file = await csv().fromFile(csvFilePath);
+  // return res.send(file)
+  if(!file) {
+    return res.send('kindly upload a file')
+  }
+
+    // Insert data into MongoDB
+
+    telappraise.insertMany(file)
+
+
+  return res.status(200).json( file );
 }
