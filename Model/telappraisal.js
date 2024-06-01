@@ -4,7 +4,7 @@ const connectDB = require('../Data/config');
 
 const telappraiseSchema = new mongoose.Schema(
   {
-    staff_id: {
+    staffId: {
          type: String,
          trim: true
     },

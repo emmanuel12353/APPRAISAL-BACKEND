@@ -35,7 +35,7 @@ const router = express.Router();
 router.get('/v1/staff', StaffListController.list).post('/v1/uploadStaff',upload.single("Csvpath"), StaffListController.Upload).get('/v1/downloadstaff', StaffListController.downloadExcel)
 
 router.post('/v1/staff/apppraisal', StaffListController.appraisalScore).get('/v1/staff/apppraisal', StaffListController.AppraisedStaff)
-router.post('/v1/AppraisalUpload',upload.single("Csvpath"), StaffListController.telappUpload)
+router.post('/v1/AppraisalUpload',upload.single("Csvpath"), StaffListController.telappUpload).get('/v1/AppraisalUpload', StaffListController.applist)
 
 
 module.exports = router

@@ -153,3 +153,17 @@ exports.telappUpload= async(req, res) => {
 
   return res.status(200).json( file );
 }
+
+// ----------------------------------------------------------------------------------------------------------------
+
+
+exports.applist = async(req, res) => {
+  
+  // res.send('Hello, Express!');
+  console.log('just testing')
+  const staffList = await telappraise.find();
+res.status(200).json({
+  status: 'success',
+  staffList
+})
+}
