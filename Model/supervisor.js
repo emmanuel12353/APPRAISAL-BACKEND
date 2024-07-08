@@ -35,11 +35,11 @@ const supervisorSchema = new mongoose.Schema(
      
         
       },
-      solid:{
-        type: Number,
-        trim: true      
+      // solid:{
+      //   type: Number,
+      //   trim: true      
       
-      },
+      // },
       password:{
         type: String,
         min: 5,
@@ -51,12 +51,12 @@ const supervisorSchema = new mongoose.Schema(
         trim: true
       },
      
-      PasswordResetToken: String,
-      PasswordResetExpires: Date,
-      city: String,
-      state: String,
+      // PasswordResetToken: String,
+      // PasswordResetExpires: Date,
+      // city: String,
+      // state: String,
       country: String,
-      phoneNumber: String,
+      // phoneNumber: String,
      
 
     },

@@ -5,62 +5,95 @@ const bcrypt = require('bcrypt');
 const Supervisor = require('../Model/supervisor');
 const signedToken = require('../Utils/signedToken')
 
+const csv=require('csvtojson');
+const xlsx = require('xlsx');
+const fs = require('fs');
+
+const json2xls = require('json2xls');
+
 // const signedToken = id => {
 //     return JWT.sign({id: id}, process.env.SECRET_KEY,{
 //       expiresIn: process.env.JWT_EXPIRES_IN
 //     })
 // }
 
-exports.supervisorSignup = async(req, res, next)=>{
-  // if(!req.body){
-  //   return next(new AppError('bad request', 400))
-  // }
-  // if(!req.body.email || !req.body.password) return next(new AppError('please provide a valid email and password', 400))
-  // if(!req.body.email) return next(new AppError('please provide a valid email', 400))
-  // if(!req.body.password) return next(new AppError('please provide a valid password', 400))
-  // if(!req.body.solid) return next(new AppError('please provide your business office soi id', 400))
-                        const id = req.body.id
-                        const firstname = req.body.firstname;
-                        const lastname= req.body.lastname;
-                       const  email = req.body.email;
-                       const password = req.body.password;
-                       const JobRole = req.body.JobRole
-                        const solid =  req.body.solid;
-                       const  city = req.body.city;
-                        const state= req.body.state;
-                        const country=  req.body.country;
-                       const  phoneNumber= req.body.phoneNumber;
-                        const Appraisal= req.body.Appraisal;
-                        const staff= req.body.staff;
+// exports.supervisorSignup = async(req, res, next)=>{
 
-  const newSupervisor = await new Supervisor({
-                        id: id,
-                        firstname: firstname,
-                        lastname: lastname,
-                        email: email,
-                        password: password,
-                        JobRole: JobRole,
-                        solid: solid,
-                        city: city,
-                        state: state,
-                        country: country,
-                        phoneNumber: phoneNumber,
-                        Appraisal: Appraisal,
-                        staff: staff,
+
+//   // start
+//                         const id = req.body.id
+//                         const firstname = req.body.firstname;
+//                         const lastname= req.body.lastname;
+//                        const  email = req.body.email;
+//                        const password = req.body.password;
+//                        const JobRole = req.body.JobRole
+//                         const solid =  req.body.solid;
+//                        const  city = req.body.city;
+//                         const state= req.body.state;
+//                         const country=  req.body.country;
+//                        const  phoneNumber= req.body.phoneNumber;
+//                         const Appraisal= req.body.Appraisal;
+//                         const staff= req.body.staff;
+
+//   const newSupervisor = await new Supervisor({
+//                         id: id,
+//                         firstname: firstname,
+//                         lastname: lastname,
+//                         email: email,
+//                         password: password,
+//                         JobRole: JobRole,
+//                         solid: solid,
+//                         city: city,
+//                         state: state,
+//                         country: country,
+//                         phoneNumber: phoneNumber,
+//                         Appraisal: Appraisal,
+//                         staff: staff,
                        
 
-  })
-  const token = signedToken(newSupervisor._id);
- await newSupervisor.save()
-  res.status(201).json({
-    status: 'success',
-    token,
-    data: {
-      supervisor: newSupervisor
-    }
-  })
-}
+//   })
+//   const token = signedToken(newSupervisor._id);
+//  await newSupervisor.save()
+//   res.status(201).json({
+//     status: 'success',
+//     token,
+//     data: {
+//       supervisor: newSupervisor
+//     }
+//   })
 
+//   // end
+
+// }
+
+
+exports.supervisorSignup = async (req, res, next) => {
+  try {
+    // Ensure the file is uploaded
+    if (!req.file) {
+      return res.status(400).send('Kindly upload a file');
+    }
+
+    const csvFilePath = req.file.path; // Access the path of the uploaded file
+
+
+    const file = await csv().fromFile(csvFilePath);
+    
+    // return res.status(200).json(file);
+    if (!file || file.length === 0) {
+      return res.status(400).send('Uploaded file is empty or invalid');
+    }
+
+
+    await Supervisor.insertMany(file);
+
+    return res.status(200).json('Supervisors successfully uploaded');
+  } catch (error) {
+
+    console.error('Error during file processing:', error);
+    return res.status(500).send('An error occurred during file processing');
+  }
+};
 
 
 
