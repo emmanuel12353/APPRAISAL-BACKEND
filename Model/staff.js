@@ -10,21 +10,21 @@ const staffSchema = new mongoose.Schema(
     },
     firstname: {
         type: String,
-        required: true,
+        // required: true,
         min: 2,
         max: 30,
         trim: true
       },
       lastname: {
         type: String,
-        required: true,
+        // required: true,
         min: 2,
         max: 30,
         trim: true
       },
       email: {
         type: String,
-        required: true,
+        // required: true,
         max: 50,
         unique: true,
         lowercase: true,
@@ -32,7 +32,7 @@ const staffSchema = new mongoose.Schema(
       },
       solId:{
         type: Number,
-        required: true,
+        // required: true,
        
         trim: true
     

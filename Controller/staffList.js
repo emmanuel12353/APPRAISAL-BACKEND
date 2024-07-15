@@ -32,41 +32,43 @@ exports.list = async(req, res) => {
   // ...........................................................................................................
 
 exports.Upload = async(req, res) => {
- const csvFilePath = req.file.path;
-  const file = await csv().fromFile(csvFilePath);
-  // return res.send(file)
-  if(!file) {
-    return res.send('kindly upload a file')
+  try {
+    // Ensure the file is uploaded
+    if (!req.file) {
+      return res.status(400).send('Kindly upload a file');
+    }
+
+    const staffFile = req.file.path; // Access the path of the uploaded file
+
+    const file = await csv().fromFile(staffFile);
+    
+    // return res.status(200).json(file);
+    if (!file || file.length === 0) {
+      return res.status(400).send('Uploaded file is empty or invalid');
+    }
+
+    await staff.insertMany(file);
+
+    return res.status(200).json('Data successfully uploaded');
+  } catch (error) {
+    console.error('Error during file processing:', error);
+    return res.status(500).send('An error occurred during file processing');
   }
-
-
-
-  // Insert data into MongoDB
-
-  staff.insertMany(file)
-    //  (err, result) => {
-    // if (err) {
-      
-  //     return res.status(500).send('Error inserting data into MongoDB');
-  //   }
-
-  return res.status(200).json( file );
-  // });
 
   };
 
 
 
 
-  function excelToJson(filePath) {
-    const workbook = xlsx.readFile(filePath);
-    const sheetName = workbook.SheetNames[0]; // Assuming data is in the first sheet
+  // function excelToJson(filePath) {
+  //   const workbook = xlsx.readFile(filePath);
+  //   const sheetName = workbook.SheetNames[0]; // Assuming data is in the first sheet
   
-    const sheet = workbook.Sheets[sheetName];
-    const jsonData = xlsx.utils.sheet_to_json(sheet, { header: 1 });
+  //   const sheet = workbook.Sheets[sheetName];
+  //   const jsonData = xlsx.utils.sheet_to_json(sheet, { header: 1 });
   
-    return jsonData;
-  }
+  //   return jsonData;
+  // }
   
   
   
